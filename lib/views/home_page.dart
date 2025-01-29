@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gamify_app/data.dart';
+
+import '../widgets/featured_games_widget.dart';
+import '../widgets/gradient_box_widget.dart';
+import '../widgets/top_layer_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -8,34 +11,28 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-
 class _HomePageState extends State<HomePage> {
-
-  var deviceHeight ;
-var deviceWidth ;
-
-@override
-  void initState() {
-    super.initState();
-  }
+  late double deviceHeight;
+  late double deviceWidth;
+  int selectedGame = 0;
 
   @override
   Widget build(BuildContext context) {
-
     deviceHeight = MediaQuery.of(context).size.height;
     deviceWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Stack(
         children: [
-          featuresGamesWidget()
+          FeaturedGamesWidget(
+            deviceHeight: deviceHeight,
+            deviceWidth: deviceWidth,
+            onGameChanged: (index) => setState(() => selectedGame = index),
+          ),
+          GradientBoxWidget(deviceHeight: deviceHeight, deviceWidth: deviceWidth),
+          TopLayerWidget(deviceHeight: deviceHeight, deviceWidth: deviceWidth, selectedGame: selectedGame),
         ],
       ),
     );
-  }
-
-  Widget featuresGamesWidget(){
-    return SizedBox(height: deviceHeight*0.5,width: deviceWidth,child: Container(
-      decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.fill,image: NetworkImage(featuredGames[0].coverImage.url))),
-    ),);
   }
 }
